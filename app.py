@@ -1,4 +1,6 @@
 import tkinter
+from tkinter.constants import FALSE, N, TRUE
+import xml.etree.ElementTree as ET
 
 class IG():
     ventana =  tkinter.Tk()
@@ -181,4 +183,193 @@ class IG():
     ventana.config(relief="ridge")
     ventana.mainloop() 
 
+    #-----------------------------------------------------------------------------------------------------------------------
+    #-----------------------------------------------------------------------------------------------------------------------
+    #------------------------------------------------------- Listas --------------------------------------------------------
+    #-----------------------------------------------------------------------------------------------------------------------
+    #-----------------------------------------------------------------------------------------------------------------------
+
+#------------------------------------------------------- Artista --------------------------------------------------------
+
+class NodeArtista:
+    def __init__(self,artista):
+        self.artistaA = artista    
+        self.albumA = ListaDobleAlbum()
+        self.nrefA = None
+        self.prefA = None
+
+class ListaDobleArtista:
+    def __init__(self):
+        self.start_nodeA = None        
     
+    def listarArtista(self, artista):  
+        if self.start_nodeA is None:
+            new_node = NodeArtista(artista)
+            self.start_nodeA = new_node
+            return       
+        elif artista == self.start_nodeA.artistaA:
+            repetido = TRUE
+        else:
+            n = self.start_nodeA            
+            while n.nrefA is not None:
+                n = n.nrefA
+            if n.artistaA != artista:
+                new_node = NodeArtista(artista,Album.start_nodeB.albumB)
+                n.nrefA = new_node
+                new_node.prefA = n
+                
+    def mostrar(self):
+        if self.start_nodeA is None:
+            print("La agenda esta vacía")
+            return
+        else:
+            n = self.start_nodeA
+            while n is not None:
+                print(n.artistaA,"",n.albumA)    
+                n = n.nrefA
+
+Artista = ListaDobleArtista()
+#-------------------------------------------------------- Album --------------------------------------------------------
+
+class NodeAlbum:
+    def __init__(self,artista,album):
+        self.artistaB = artista
+        self.albumB = album
+        self.nombreB = ListaDobleCancion()
+        self.nrefB = None
+        self.prefB = None
+
+class ListaDobleAlbum:
+    def __init__(self):
+        self.start_nodeB = None
+
+    def listarAlbum(self,artista, album):
+        if self.start_nodeB is None:
+            new_nodeB = NodeAlbum(artista, album)
+            self.start_nodeB = new_nodeB
+            return
+        m = self.start_nodeB
+        while m.nrefB is not None:
+            m = m.nrefB
+        new_nodeB = NodeAlbum(artista, album)
+        m.nrefB = new_nodeB
+        new_nodeB.prefB = m
+    
+    def mostrarB(self):
+        if self.start_nodeB is None:
+            print("La agenda esta vacía")
+            return
+        else:
+            n = self.start_nodeB
+            while n is not None:
+                print(n.artistaB,"",n.albumB)    
+                n = n.nrefB
+
+Album = ListaDobleAlbum()
+#-------------------------------------------------------- Cancion --------------------------------------------------------
+
+class NodeCancion:
+    def __init__(self,imagen,ruta, nombre):
+        self.imagenC = imagen
+        self.rutaC = ruta
+        self.imagenC = nombre
+        self.nrefC = None
+        self.prefC = None
+
+class ListaDobleCancion:
+    def __init__(self):
+        self.start_nodeC = None
+
+    def listarCancion(self,imagen, ruta, nombre):
+        if self.start_nodeC is None:
+            new_nodeC = NodeCancion(imagen,ruta, nombre)
+            self.start_nodeC = new_nodeC
+            return
+        o = self.start_nodeC
+        while o.nrefC is not None:
+            o = o.nrefC
+        new_nodeC = NodeCancion(imagen,ruta, nombre)
+        o.nrefC = new_nodeC
+        new_nodeC.prefC = o
+
+Cancion = ListaDobleCancion()
+#--------------------------------------------------------- XML --------------------------------------------------------
+
+def impA():
+    contenido = open("biblioteca.xml").read()
+    ListArtista = ListaDobleArtista()
+    biblioteca = ET.fromstring(contenido)
+    for biblio in biblioteca.iter("biblioteca"):    
+
+        for alb in biblio.iter("album"):
+            artista = ""
+            album = ""
+            for ar,al in zip(alb.iter("artista"),alb.iter("album")):        
+                artista += ar.text
+                album += al.text
+            Album.listarAlbum(artista,album)   
+
+        for art in biblio.iter("artista"):
+            artista = ""
+            for ar in zip(art.iter("artista")):                
+                artista += art.text
+            Artista.listarArtista(artista)
+            
+
+def impB():
+    impA()
+    contenido = open("biblioteca.xml").read()
+    ListaAlbum = ListaDobleAlbum()
+    biblioteca = ET.fromstring(contenido)
+    for biblio in biblioteca.iter("biblioteca"):
+        for art in biblio.iter("album"):
+            album = ""
+            for al in zip(art.iter("album")):        
+                album += art.text
+            Album.listarAlbum(album)
+
+def impC():
+    contenido = open("biblioteca.xml").read()
+    ListArtista = ListaDobleArtista()
+    ListaAlbum = ListaDobleAlbum()
+    ListaCancion = ListaDobleCancion()
+    biblioteca = ET.fromstring(contenido)
+    for biblio in biblioteca.iter("biblioteca"):
+        for art in biblio.iter("artista"):
+            artista = ""
+            album = ""
+            imagen = ""
+            ruta = ""
+            nombre = ""
+            for ar,al,im,ru,no in zip(art.iter("artista"),art.iter("album"),art.iter("imagen"),art.iter("ruta"),art.iter("nombre")):                
+                artista += ar.text
+                album += al.text
+                imagen += im.text
+                ruta += ru.text
+                nombre += no.text 
+            Artista.listarArtista(artista)
+            Album.listarAlbum(album)
+            Cancion.listarCancion(imagen,ruta,nombre)
+
+
+
+Salir = False
+opcion = 0
+
+while not Salir:
+    print("1. Importar contactos")
+    print("2. Mostar Datos")
+    print("3. Salir")
+    print("--------------------------------------")
+
+    menu = (input("Opcion: "))
+    if menu.isdigit():
+        menu = int(menu)
+        if menu == 1:           
+            impA()
+        elif menu == 2:
+            Artista.mostrar()
+        elif menu == 3:
+            exit()
+    else:
+            print("Debe ingresar una opcion valida ")
