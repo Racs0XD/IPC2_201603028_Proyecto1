@@ -12,7 +12,8 @@ import xml.etree.ElementTree as ET
 #--------------------------------------------------------- XML --------------------------------------------------------
 from ListaDoble import *
 Artista_Lista = ListaDobleArtista()
-Cancion_Lista = ListaDobleCancion()
+
+Listar = Llenado()
   
 
 def cargaXML():
@@ -33,47 +34,8 @@ def cargaXML():
                 imagen += im.text 
             for ru in can.iter("ruta"):
                 ruta += ru.text   
-            agregar(artista,album,imagen,ruta,nombre)
-
-
-def agregar(artista,album,imagen,ruta,nombre): 
-    if Artista_Lista.inicioArtista is None:             
-        artistaAppend = NodeArtista(artista)
-        albumAppend = NodeAlbum(album,imagen)
-        cancionAppend = NodeCancion(nombre,ruta)
-        albumAppend.setCancion(cancionAppend)
-        artistaAppend.setAlbum(albumAppend)   
-        Artista_Lista.listarArtista(artistaAppend)     
-    else:
-        for Artista_Listado in Artista_Lista.mostrarArtista():
-            if Artista_Listado.artistaA == artista:
-                print(Artista_Listado.artistaA,"", artista)                   
-                for albumListado in Artista_Listado.albumA.mostrarAlbum():
-                    if albumListado.albumB == album:
-                        cancionAppend = NodeCancion(nombre,ruta)
-                        albumListado.setCancion(cancionAppend)  
-                        break                          
-                    else:
-                        albumAppend = NodeAlbum(album,imagen)
-                        cancionAppend = NodeCancion(nombre,ruta)
-                        albumAppend.setCancion(cancionAppend)
-                        Artista_Listado.setAlbum(albumAppend)
-                        break
-            
-                            
-                   
+            Listar.agregarCancion(artista,album,imagen,ruta,nombre)
  
-def impresion():
-    MostarArtista = Artista_Lista.mostrarArtista()
-    for artista in MostarArtista:
-        print("Artista: ",artista.artistaA)
-        for album in artista.albumA.mostrarAlbum():
-            print("         Album: ",album.albumB)
-            print("         Imagen de Album: ",album.imagenB)            
-            for cancion in album.cancionB.mostrarCancion():
-                print("             Cancion: ",cancion.nombreC)
-                print("             Ruta: ",cancion.rutaC)
-                break
 
 
 class IG():   
