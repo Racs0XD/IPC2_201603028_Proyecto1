@@ -12,7 +12,6 @@ import xml.etree.ElementTree as ET
 #--------------------------------------------------------- XML --------------------------------------------------------
 from ListaDoble import *
 ArtistaLista = ListaDobleArtista()
-AlbumLista = ListaDobleAlbum()
 CancionLista = ListaDobleCancion()
   
 
@@ -37,16 +36,33 @@ def cargaXML():
             agregar(artista,album,imagen,ruta,nombre)
 
 
-def agregar(artista,album,imagen,ruta,nombre):   
-    Lista = ArtistaLista     
-    if Lista.inicioArtista is None:             
-        artistaAppend = NodeArtista(artista)
-        albumAppend = NodeAlbum(album,imagen)
-        cancionAppend = NodeCancion(nombre,ruta)
-        albumAppend.setCancion(cancionAppend)
-        artistaAppend.setAlbum(albumAppend)   
-        ArtistaLista.listarArtista(artistaAppend)     
-      
+def agregar(artista,album,imagen,ruta,nombre): 
+    cancion = objetoCompleto(artista,album,imagen,ruta,nombre)  
+    CancionLista.listarCancion(cancion)
+    for temp in CancionLista.mostrarCancion():
+        if ArtistaLista.inicioArtista is None:             
+            artistaAppend = NodeArtista(temp.artista)
+            albumAppend = NodeAlbum(temp.album,temp.imagen)
+            cancionAppend = NodeCancion(temp.nombre,temp.ruta)
+            albumAppend.setCancion(cancionAppend)
+            artistaAppend.setAlbum(albumAppend)   
+            ArtistaLista.listarArtista(artistaAppend)     
+        else:
+            for artistaListado in ArtistaLista.mostrarArtista():
+                if artistaListado.artistaA == temp.artista:
+                    for albumListado in artistaListado.albumA.mostrarAlbum():
+                        if albumListado.albumB == temp.album:
+                            print("lol ",temp.album)
+                            cancionAppend = NodeCancion(temp.nombre,temp.ruta)
+                            albumListado.setCancion(cancionAppend)
+                            break
+                        else:
+                            albumAppend = NodeAlbum(temp.album,temp.imagen)
+                            cancionAppend = NodeCancion(temp.nombre,temp.ruta)
+                            albumAppend.setCancion(cancionAppend)
+                            artistaListado.setAlbum(albumAppend)
+                            break
+                   
  
 def impresion():
     MostarArtista = ArtistaLista.mostrarArtista()
