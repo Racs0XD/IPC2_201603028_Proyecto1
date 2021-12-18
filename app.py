@@ -183,11 +183,11 @@ class IG():
     boton5.place(x=700,y=50)
     boton5.config(width=75, height=75)
     
-    boton6 = tkinter.Button(frameAr,text="Archivo", fg="white",font=("broadway 12 bold"), command = cargaXML(), borderwidth=0, bg="grey")
+    boton6 = tkinter.Button(frameAr,text="Archivo", fg="white",font=("broadway 12 bold"), command = cargaXML, borderwidth=0, bg="grey")
     boton6.place(x=25,y=5)
     boton6.config(width=12, height=1)
 
-    boton7 = tkinter.Button(frameAr,text="Reporte", fg="white",font=("broadway 12 bold"), command = impresion, borderwidth=0, bg="grey")
+    boton7 = tkinter.Button(frameAr,text="Reporte", fg="white",font=("broadway 12 bold"), command = Listar.graphviz, borderwidth=0, bg="grey")
     boton7.place(x=205,y=5)
     boton7.config(width=12, height=1)
 
