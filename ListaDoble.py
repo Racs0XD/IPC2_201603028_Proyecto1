@@ -56,6 +56,7 @@ class ListaDobleArtista:
                 n = n.siguiente
                 yield artista
 
+
 class ListaDobleAlbum:
     def __init__(self):
         self.inicioAlbum = None     
@@ -79,9 +80,9 @@ class ListaDobleAlbum:
         else:
             m = self.inicioAlbum
             while m is not None:            
-                artista = m.data
+                album = m.data
                 m = m.siguiente
-                yield artista        
+                yield album        
     
 class ListaDobleCancion:
     def __init__(self):
@@ -98,14 +99,13 @@ class ListaDobleCancion:
         o.siguiente = nuevaCancion
         nuevaCancion.anterior = o
 
-    def mostrarAlbum(self):
+    def mostrarCancion(self):
         if self.inicioCancion is None:
             print("La lista esta vacía")            
         else:
             o = self.inicioCancion
             while o is not None:            
-                artista = o.data
+                cancion = o.data
                 o = o.siguiente
-                yield artista
+                yield cancion
 
-    

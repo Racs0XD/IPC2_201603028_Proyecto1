@@ -34,19 +34,31 @@ def cargaXML():
                 imagen += im.text 
             for ru in can.iter("ruta"):
                 ruta += ru.text   
-            verificador(artista,album,imagen,nombre,ruta)
- 
- 
-def verificador(artista,album,imagen,nombre,ruta):
-    artistaAppend = NodeArtista(artista)
-    albumAppend = NodeAlbum(album,imagen)
-    cancionAppend = NodeCancion(nombre,ruta)
-    albumAppend.setCancion(cancionAppend)
-    artistaAppend.setAlbum(albumAppend)
-    ArtistaLista.listarArtista(artistaAppend)     
-         
+            agregar(artista,album,imagen,ruta,nombre)
 
 
+def agregar(artista,album,imagen,ruta,nombre):   
+    Lista = ArtistaLista     
+    if Lista.inicioArtista is None:             
+        artistaAppend = NodeArtista(artista)
+        albumAppend = NodeAlbum(album,imagen)
+        cancionAppend = NodeCancion(nombre,ruta)
+        albumAppend.setCancion(cancionAppend)
+        artistaAppend.setAlbum(albumAppend)   
+        ArtistaLista.listarArtista(artistaAppend)     
+      
+ 
+def impresion():
+    MostarArtista = ArtistaLista.mostrarArtista()
+    for artista in MostarArtista:
+        print("Artista: ",artista.artistaA)
+        for album in artista.albumA.mostrarAlbum():
+            print("         Album: ",album.albumB)
+            print("         Imagen de Album: ",album.imagenB)            
+            for cancion in album.cancionB.mostrarCancion():
+                print("             Cancion: ",cancion.nombreC)
+                print("             Ruta: ",cancion.rutaC)
+                break
 
 
 class IG():   
@@ -198,7 +210,7 @@ class IG():
     boton6.place(x=25,y=5)
     boton6.config(width=12, height=1)
 
-    boton7 = tkinter.Button(frameAr,text="Reporte", fg="white",font=("broadway 12 bold"), command = hola, borderwidth=0, bg="grey")
+    boton7 = tkinter.Button(frameAr,text="Reporte", fg="white",font=("broadway 12 bold"), command = impresion, borderwidth=0, bg="grey")
     boton7.place(x=205,y=5)
     boton7.config(width=12, height=1)
 
