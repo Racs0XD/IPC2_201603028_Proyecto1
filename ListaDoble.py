@@ -16,7 +16,6 @@ class NodeAlbum:
     def setCancion(self,cancion):
         return self.cancionB.listarCancion(cancion)
 
-
 class NodeCancion:
     def __init__(self,nombre, ruta):
         self.nombreC = nombre
@@ -27,6 +26,7 @@ class NodeTemp:
         self.data = data
         self.siguiente= None
         self.anterior = None
+
 
 class ListaDobleArtista:    
     def __init__(self):
