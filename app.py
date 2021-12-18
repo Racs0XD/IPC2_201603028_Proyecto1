@@ -10,21 +10,11 @@ import xml.etree.ElementTree as ET
 
 
 #--------------------------------------------------------- XML --------------------------------------------------------
-from ListaDoble import ListaDoble
-Biblioteca = ListaDoble()
-
-def cargaXMLzx():
-    contenido = open("biblioteca.xml").read()
-    biblioteca = ET.fromstring(contenido)
-    for biblio in biblioteca.iter("biblioteca"):        
-            
-        for lib in biblio.iter("artista"):
-            artistaB = ""
-            albumB = ""
-            for art,alb in zip(lib.iter("artista"),lib.iter("album")):                
-                artistaB += art.text
-                albumB += alb.text
-            Biblioteca.listarAlbum(artistaB,albumB)        
+from ListaDoble import *
+ArtistaLista = ListaDobleArtista()
+AlbumLista = ListaDobleAlbum()
+CancionLista = ListaDobleCancion()
+  
 
 def cargaXML():
     contenido = open("biblioteca.xml").read()
@@ -36,14 +26,27 @@ def cargaXML():
             artista = ""
             imagen = ""
             ruta = ""
-            for al,ar,im,ru in zip(can.iter("artista"),can.iter("album"),can.iter("imagen"),can.iter("ruta")):    
-                album += ar.text                 
-                artista += al.text                
-                imagen += im.text
-                ruta += ru.text
-            Biblioteca.listarArtista(artista)
-            Biblioteca.listarAlbum(artista,album)
-            Biblioteca.listarCancion(nombre,album,artista,imagen,ruta)
+            for ar in can.iter("artista"):
+                artista += ar.text  
+            for al in can.iter("album"):
+                album += al.text  
+            for im in can.iter("imagen"):
+                imagen += im.text 
+            for ru in can.iter("ruta"):
+                ruta += ru.text   
+            verificador(artista,album,imagen,nombre,ruta)
+ 
+ 
+def verificador(artista,album,imagen,nombre,ruta):
+    artistaAppend = NodeArtista(artista)
+    albumAppend = NodeAlbum(album,imagen)
+    cancionAppend = NodeCancion(nombre,ruta)
+    albumAppend.setCancion(cancionAppend)
+    artistaAppend.setAlbum(albumAppend)
+    ArtistaLista.listarArtista(artistaAppend)     
+         
+
+
 
 
 class IG():   
@@ -169,25 +172,25 @@ class IG():
 
     img2 = tkinter.PhotoImage(file='siguiente.png')
     img_label2 = tkinter.Label(image=img2)
-    boton2 = tkinter.Button(frame, image=img2, command = Biblioteca.mostrarBiblioteca, borderwidth=0, bg="lightgrey")
+    boton2 = tkinter.Button(frame, image=img2, command = hola, borderwidth=0, bg="lightgrey")
     boton2.place(x=700,y=420)
     boton2.config(width=75, height=75)
 
     img3 = tkinter.PhotoImage(file='play.png')
     img_label3 = tkinter.Label(image=img3)
-    boton3 = tkinter.Button(frame, image=img3, command = Biblioteca.mostrar, borderwidth=0, bg="lightgrey")
+    boton3 = tkinter.Button(frame, image=img3, command = hola, borderwidth=0, bg="lightgrey")
     boton3.place(x=500,y=50)
     boton3.config(width=75, height=75)
 
     img4 = tkinter.PhotoImage(file='pausa.png')
     img_label4 = tkinter.Label(image=img4)
-    boton4 = tkinter.Button(frame, image=img4, command = Biblioteca.mostrarCancion, borderwidth=0, bg="lightgrey")
+    boton4 = tkinter.Button(frame, image=img4, command = hola, borderwidth=0, bg="lightgrey")
     boton4.place(x=600,y=50)
     boton4.config(width=75, height=75)
 
     img5 = tkinter.PhotoImage(file='stop.png')
     img_label5 = tkinter.Label(image=img5)
-    boton5 = tkinter.Button(frame, image=img5, command = Biblioteca.mostrarB, borderwidth=0, bg="lightgrey")
+    boton5 = tkinter.Button(frame, image=img5, command = hola, borderwidth=0, bg="lightgrey")
     boton5.place(x=700,y=50)
     boton5.config(width=75, height=75)
     

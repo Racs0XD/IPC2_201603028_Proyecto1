@@ -1,156 +1,111 @@
 class NodeArtista:
     def __init__(self,artista):
         self.artistaA = artista 
-        self.albumA = NodeAlbum("","")
-        self.siguienteArtista = None
-        self.anteriorArtista = None    
+        self.albumA = ListaDobleAlbum()  
     
-    def getAlbum(self):
-        return self.albumA
+    def setAlbum(self,album):
+        return self.albumA.listarAlbum(album)
 
 
 class NodeAlbum:
-    def __init__(self,artista,album):
-        self.artistaB = artista
+    def __init__(self,album,imagen):
         self.albumB = album
-        self.nombreB = NodeCancion("","","","","")
-        self.siguienteAlbum = None
-        self.anteriorAlbum = None
+        self.imagenB = imagen
+        self.cancionB = ListaDobleCancion()
 
-    def getCancion(self):
-        return self.nombreB
-    
-    def setCancion(self, nombre):
-        self.nombreB = nombre
-    
+    def setCancion(self,cancion):
+        return self.cancionB.listarCancion(cancion)
 
 
 class NodeCancion:
-    def __init__(self,nombre,album,artista, imagen, ruta):
+    def __init__(self,nombre, ruta):
         self.nombreC = nombre
-        self.albumC = album
-        self.artistaC = artista
-        self.imagenC = imagen
         self.rutaC = ruta
-        
-        self.siguienteCancion = None
-        self.anteriorCancion = None
 
+class NodeTemp:
+    def __init__(self, data):
+        self.data = data
+        self.siguiente= None
+        self.anterior = None
 
-
-class ListaDoble:    
+class ListaDobleArtista:    
     def __init__(self):
-        self.inicioArtista = None    
-        self.inicioAlbum = None    
-        self.inicioCancion = None                  
+        self.inicioArtista = None                    
     
     def listarArtista(self, artista):  
         if self.inicioArtista is None:
-            nuevoArtista = NodeArtista(artista)
+            nuevoArtista = NodeTemp(artista)
             self.inicioArtista = nuevoArtista
             return    
         else:
             n = self.inicioArtista            
-            while n.siguienteArtista is not None:
-                n = n.siguienteArtista
-            if n.artistaA != artista:
-                nuevoArtista = NodeArtista(artista)
-                n.siguienteArtista = nuevoArtista
-                nuevoArtista.anteriorArtista = n  
+            while n.siguiente is not None:
+                n = n.siguiente
+            nuevoArtista = NodeTemp(artista)
+            n.siguiente= nuevoArtista
+            nuevoArtista.anterior = n  
 
     
-    
-    def set(self, album):
-        self.albumA = album 
-    
-    def getAlbum(self):
-        return self.albumA
-
-    def getArtista(self, artista):
-        n = self.inicioArtista
-        while n is not None:
-            if n.artistaA == artista:
-                return 
-            n = n.siguienteArtista
-        return None
-    
-    def mostrar(self):
+    def mostrarArtista(self):
         if self.inicioArtista is None:
-            print("La agenda esta vacía")
-            return
+            print("La lista esta vacía")            
         else:
             n = self.inicioArtista
-            while n is not None:
-                print(n.artistaA,"",n.albumA)    
-                n = n.siguienteArtista       
+            while n is not None:            
+                artista = n.data
+                n = n.siguiente
+                yield artista
 
-    def listarAlbum(self,artista, album):        
+class ListaDobleAlbum:
+    def __init__(self):
+        self.inicioAlbum = None     
+        
+    def listarAlbum(self,album):        
         if self.inicioAlbum is None:     
-            nuevoAlbum = NodeAlbum(artista, album)       
+            nuevoAlbum = NodeTemp(album)       
             self.inicioAlbum = nuevoAlbum             
         else:      
             m = self.inicioAlbum
-            while m.siguienteAlbum is not None:
-                m = m.siguienteAlbum
-            if m.siguienteAlbum != album:
-                nuevoAlbum = NodeAlbum(artista, album)
-                m.siguienteAlbum = nuevoAlbum
-                nuevoAlbum.anteriorAlbum = m
-        
-    def mostrarB(self):
+            while m.siguiente is not None:
+                m = m.siguiente
+            if m.siguiente != album:
+                nuevoAlbum = NodeTemp(album)
+                m.siguiente = nuevoAlbum
+                nuevoAlbum.anterior = m
+
+    def mostrarAlbum(self):
         if self.inicioAlbum is None:
-            print("La agenda esta vacía")
-            return
+            print("La lista esta vacía")            
         else:
-            n = self.inicioAlbum
-            while n is not None:
-                print(n.artistaB,"",n.albumB)    
-                n = n.siguienteAlbum
-
+            m = self.inicioAlbum
+            while m is not None:            
+                artista = m.data
+                m = m.siguiente
+                yield artista        
     
+class ListaDobleCancion:
+    def __init__(self):
+        self.inicioCancion = None     
 
-    def listarCancion(self,nombre,album,artista,imagen,ruta,):
+    def listarCancion(self,cancion):
         if self.inicioCancion is None:
-            nuevaCancion = NodeCancion(nombre,album,artista,imagen,ruta)
+            nuevaCancion = NodeTemp(cancion)
             self.inicioCancion = nuevaCancion
         o = self.inicioCancion
-        while o.siguienteCancion is not None:
-            o = o.siguienteCancion
-        nuevaCancion = NodeCancion(nombre,album,artista,imagen,ruta)
-        o.siguienteCancion = nuevaCancion
-        nuevaCancion.anteriorCancion = o
+        while o.siguiente is not None:
+            o = o.siguiente
+        nuevaCancion = NodeTemp(cancion)
+        o.siguiente = nuevaCancion
+        nuevaCancion.anterior = o
 
-    def mostrarCancion(self):
+    def mostrarAlbum(self):
         if self.inicioCancion is None:
-            print("La lista esta vacía")
-            return
+            print("La lista esta vacía")            
         else:
-            n = self.inicioCancion
-            while n is not None:
-                print(n.nombreC,"",n.albumC,"",n.artistaC,"",n.imagenC,"",n.rutaC)    
-                n = n.siguienteCancion
+            o = self.inicioCancion
+            while o is not None:            
+                artista = o.data
+                o = o.siguiente
+                yield artista
+
     
-
-
-    def mostrarBiblioteca(self):        
-        if self.inicioArtista is None:
-            print("La lista esta vacía")
-            return
-        else:
-            a = self.inicioArtista
-            while a is not None:
-                b = self.inicioAlbum
-                while b is not None:
-                    if a.artistaA == b.artistaB:                        
-                        if a.albumA is None:
-                            a.albumA = b.albumB
-                        else:
-                            a.albumA.siguienteAlbum = b.albumB   
-                        c = self.inicioCancion
-                        while c is not None:
-                            if a.artistaA == c.artistaC and b.albumB == c.albumC:
-                                b.nombreB = (c.nombreC,c.albumC,c.artistaC,c.imagenC,c.rutaC)                            
-                            c = c.siguienteCancion
-                    b = b.siguienteAlbum
-                print(a.artistaA,"",str(a.albumA))      
-                a = a.siguienteArtista
