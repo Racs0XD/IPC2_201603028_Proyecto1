@@ -1,6 +1,7 @@
 import tkinter
-from tkinter.constants import FALSE, N, TRUE
+from tkinter import filedialog
 import xml.etree.ElementTree as ET
+import os
 
   #-----------------------------------------------------------------------------------------------------------------------
     #-----------------------------------------------------------------------------------------------------------------------
@@ -14,10 +15,13 @@ from ListaDoble import *
 Artista_Lista = ListaDobleArtista()
 
 Listar = Llenado()
-  
 
-def cargaXML():
-    contenido = open("biblioteca.xml").read()
+def buscador():
+    val = filedialog.askopenfilename(title ='Seleccion de archivo xml',initialdir = './', filetypes=(('xml files', '*.xml'),('all files','*.*')))
+    cargaXML(val)
+  
+def cargaXML(ruta):   
+    contenido = open(ruta).read()
     biblioteca = ET.fromstring(contenido)
     for biblio in biblioteca.iter("biblioteca"):
         for can in biblio.iter("cancion"):
@@ -148,9 +152,10 @@ class IG():
     #------------------------------------------------------ Buttons --------------------------------------------------------
     #-----------------------------------------------------------------------------------------------------------------------
     #-----------------------------------------------------------------------------------------------------------------------
-
+    
     def hola():
-        print("Hola Mundo")            
+        print("Hola Mundo")  
+
     
 
     img = tkinter.PhotoImage(file='anterior.png')
@@ -183,7 +188,7 @@ class IG():
     boton5.place(x=700,y=50)
     boton5.config(width=75, height=75)
     
-    boton6 = tkinter.Button(frameAr,text="Archivo", fg="white",font=("broadway 12 bold"), command = cargaXML, borderwidth=0, bg="grey")
+    boton6 = tkinter.Button(frameAr,text="Archivo", fg="white",font=("broadway 12 bold"), command = buscador, borderwidth=0, bg="grey")
     boton6.place(x=25,y=5)
     boton6.config(width=12, height=1)
 
@@ -209,15 +214,12 @@ class IG():
     #-----------------------------------------------------------------------------------------------------------------------
     #-----------------------------------------------------------------------------------------------------------------------
     #------------------------------------------------------- Entry ---------------------------------------------------------
-    #-----------------------------------------------------------------------------------------------------------------------
-    #-----------------------------------------------------------------------------------------------------------------------
-
-    
-
+    #-----------------------------------------------------------------------------------------------------------------------  
+    #-----------------------------------------------------------------------------------------------------------------------      
 
     ventana.config(cursor="arrow")
     ventana.config(bg="grey")
     ventana.config(bd=15)
     ventana.config(relief="ridge")
     ventana.mainloop() 
-  
+
